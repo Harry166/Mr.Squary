@@ -23,4 +23,4 @@ A challenging arcade-style game made with LÖVE (Love2D) where you play as a blu
 - Left-click to select upgrades and buttons
 
 ## Credits
-Game created by [Your Name]
+Game created by Vedant Dinvahi
