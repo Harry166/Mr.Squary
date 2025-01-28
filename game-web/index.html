@@ -5,22 +5,34 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=1">
     <title>Mr. Squary</title>
+    <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        canvas {
+            width: 1024px;  /* Increased from 800px */
+            height: 768px;  /* Increased from 600px */
+        }
+    </style>
 
     <!-- Load custom style sheet -->
     <link rel="stylesheet" type="text/css" href="theme/love.css">
   </head>
   <body>
-    <center>
-      <div>
-        <h1>Mr. Squary</h1>
-        <canvas id="loadingCanvas" oncontextmenu="event.preventDefault()" width="800" height="600"></canvas>
-        <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
-      </div>
-    </center>
+    <canvas id="loadingCanvas"></canvas>
+    <canvas id="gameCanvas" style="display: none;"></canvas>
 
     <script type='text/javascript'>
       function goFullScreen(){
-            var canvas = document.getElementById("canvas");
+            var canvas = document.getElementById("gameCanvas");
             if(canvas.requestFullScreen)
                 canvas.requestFullScreen();
             else if(canvas.webkitRequestFullScreen)
@@ -29,7 +41,7 @@
                 canvas.mozRequestFullScreen();
       }
       function FullScreenHook(){
-        var canvas = document.getElementById("canvas");
+        var canvas = document.getElementById("gameCanvas");
         canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
         canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
       }
@@ -63,22 +75,13 @@
         arguments: ["./game.love"],
         INITIAL_MEMORY: 16777216,
         printErr: console.error.bind(console),
-        canvas: (function() {
-          var canvas = document.getElementById('canvas');
-
-          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-          // application robust, you may want to override this behavior before shipping!
-          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
-
-          return canvas;
-        })(),
+        canvas: document.getElementById('gameCanvas'),
         setStatus: function(text) {
           if (text) {
             drawLoadingText(text);
           } else if (Module.remainingDependencies === 0) {
             document.getElementById('loadingCanvas').style.display = 'none';
-            document.getElementById('canvas').style.visibility = 'visible';
+            document.getElementById('gameCanvas').style.visibility = 'visible';
           }
         },
         totalDependencies: 0,
